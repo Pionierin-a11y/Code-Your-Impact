@@ -35,7 +35,7 @@ body {
 /* --- HIER DIE ANIMATION DEFINIEREN --- */
 /* Beispiel: Ein Pulse-Effekt (Größer und kleiner werden) */
 .animate-gif {
-    animation: pulse 1s ease-in-out infinite;
+    animation: pulse 5s forward;
 }
 
 @keyframes pulse {
