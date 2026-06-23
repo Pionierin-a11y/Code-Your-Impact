@@ -3,7 +3,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const uiContainer = document.querySelector("#ui-container");
     const arGif = document.querySelector("#ar-gif");
     const arSound = document.querySelector("#ar-sound");
+    const welcomeText = document.querySelector("#welcome");
 
+    function changeText(newText) {
+        text.classList.remove('fade-in');
+        
+        setTimeout(() => {
+            welcomeText.innerText = newText;
+            welcomeText.classList.add('fade-in');
+        }, 50);
+    }
+    
     // 1. Wenn das Bild erkannt wird -> GIF anzeigen
     targetEntity.addEventListener("targetFound", () => {
         console.log("Target gefunden!");
@@ -28,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // --- ANIMATION STARTEN ---
         // Fügt die CSS-Animationsklasse hinzu
         arGif.classList.add("animate-gif");
+
+        // --- TEXT ANZEIGEN ---
+        changeText("Hallo Amelie, schön dich zu sehen!");
 
         // --- SOUND ABSPIELEN ---
         // Sound von vorne abspielen (falls er schon läuft)
