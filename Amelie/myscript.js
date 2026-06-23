@@ -1,16 +1,42 @@
-AFRAME.registerComponent('ar-interaktion', {
-        init: function () {
-          // Das Element (unser Video), auf das geklickt wird
-          let meinVideo = document.querySelector('#animation');
-          let meinSound = document.querySelector('#soundeffekt');
+document.addEventListener("DOMContentLoaded", () => {
+    const targetEntity = document.querySelector("#mytarget");
+    const uiContainer = document.querySelector("#ui-container");
+    const arGif = document.querySelector("#ar-gif");
+    const arSound = document.querySelector("#ar-sound");
 
-          this.el.addEventListener('click', () => {
-            // Video abspielen (falls es pausiert war)
-            meinVideo.play();
-            
-            // Sound abspielen
-            meinSound.currentTime = 0; // Sound von vorne starten
-            meinSound.play();
-          });
-        }
-      });
+    // 1. Wenn das Bild erkannt wird -> GIF anzeigen
+    targetEntity.addEventListener("targetFound", () => {
+        console.log("Target gefunden!");
+        uiContainer.classList.remove("hidden");
+    });
+
+    // 2. Wenn das Bild aus dem Fokus verliert -> GIF ausblenden & aufräumen
+    targetEntity.addEventListener("targetLost", () => {
+        console.log("Target verloren!");
+        uiContainer.classList.add("hidden");
+        
+        // Optional: Animation stoppen und Sound pausieren, wenn das Bild weg ist
+        arGif.classList.remove("animate-gif");
+        arSound.pause();
+        arSound.currentTime = 0; // Sound zurücksetzen
+    });
+
+    // 3. Klick-Event auf das GIF (Animation und Sound separat starten)
+    arGif.addEventListener("click", () => {
+        console.log("GIF wurde geklickt!");
+
+        // --- ANIMATION STARTEN ---
+        // Fügt die CSS-Animationsklasse hinzu
+        arGif.classList.add("animate-gif");
+
+        // --- SOUND ABSPIELEN ---
+        // Sound von vorne abspielen (falls er schon läuft)
+        arSound.currentTime = 0; 
+        
+        // iOS-Sicherer Play-Befehl (Browser blockieren oft Autoplay ohne User-Interaktion, 
+        // aber durch den Klick hier ist es erlaubt!)
+        arSound.play().catch(error => {
+            console.error("Audio konnte nicht abgespielt werden:", error);
+        });
+    });
+});
